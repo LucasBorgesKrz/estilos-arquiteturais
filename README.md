@@ -1,7 +1,6 @@
 # Estudo de Caso — Parte 2: A Defesa Arquitetural
 
 **Disciplina:** Arquitetura de Software
-**Integrantes do grupo:** _(preencher com nomes e matrículas)_
 
 > Entrega 100% teórica/modelagem: este repositório não contém código. Reúne os requisitos priorizados, os registros de decisão arquitetural (ADRs), os slides da apresentação para a "diretoria", o diagrama C4 e a simulação de crise.
 
