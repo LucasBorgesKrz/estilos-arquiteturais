@@ -1,176 +1,179 @@
-# Estudo de Caso — Escolha de Estilos Arquiteturais
+# Estudo de Caso — Parte 2: A Defesa Arquitetural
 
 **Disciplina:** Arquitetura de Software
+**Integrantes do grupo:** _(preencher com nomes e matrículas)_
 
-> Entrega 100% teórica/modelagem: este repositório não contém código. Reúne a análise dos sistemas, as decisões justificadas, os slides da apresentação e um diagrama de alto nível.
+> Entrega 100% teórica/modelagem: este repositório não contém código. Reúne os requisitos priorizados, os registros de decisão arquitetural (ADRs), os slides da apresentação para a "diretoria", o diagrama C4 e a simulação de crise.
 
-Escolhemos o estilo arquitetural de **três sistemas fictícios** com necessidades bem diferentes: um e-commerce, um app bancário e um jogo multiplayer.
+Na Parte 1 escolhemos o estilo arquitetural de **três sistemas fictícios**. Agora **formalizamos e defendemos** essas decisões: refinamos os requisitos não funcionais, registramos cada decisão em um ADR com seus prós **e contras**, e preparamos a defesa para quem decide dinheiro e prazo.
 
-## Conteúdo do repositório
+## Estrutura do repositório
 
 | Caminho | Descrição |
 |---|---|
-| [`README.md`](README.md) | Este documento: análise, decisões, justificativas e reflexão (Partes 1, 2 e 4) |
-| [`docs/matriz-de-decisao.md`](docs/matriz-de-decisao.md) | Comparação ponderada dos estilos candidatos, para tornar as escolhas explícitas e discutíveis |
-| [`slides/apresentacao.pdf`](slides/apresentacao.pdf) | Slides da apresentação oral (Parte 3) |
-| [`slides/roteiro-de-fala.md`](slides/roteiro-de-fala.md) | Roteiro de apoio para a apresentação oral |
-| [`diagramas/jogo-multiplayer-c4.png`](diagramas/jogo-multiplayer-c4.png) | Diagrama C4 do jogo multiplayer, em PNG (bônus) |
-| [`diagramas/jogo-multiplayer-c4.svg`](diagramas/jogo-multiplayer-c4.svg) | O mesmo diagrama, em SVG (vetorial) |
+| [`README.md`](README.md) | Este documento: requisitos priorizados, ADRs resumidos, apresentação e reflexão |
+| [`adr/adr-001-ecommerce.md`](adr/adr-001-ecommerce.md) | ADR completo do E-commerce |
+| [`adr/adr-002-app-bancario.md`](adr/adr-002-app-bancario.md) | ADR completo do App Bancário |
+| [`adr/adr-003-jogo-multiplayer.md`](adr/adr-003-jogo-multiplayer.md) | ADR completo do Jogo Multiplayer |
+| [`docs/simulacao-de-crise.md`](docs/simulacao-de-crise.md) | "E se o sistema crescer 10x em 1 mês?", para os três sistemas |
+| [`docs/matriz-de-decisao.md`](docs/matriz-de-decisao.md) | Comparação ponderada dos estilos candidatos (da Parte 1) |
+| [`docs/parte1-estudo-de-caso.md`](docs/parte1-estudo-de-caso.md) | Documento da Parte 1 (contexto, requisitos e justificativas iniciais) |
+| [`slides/apresentacao-parte2.pdf`](slides/apresentacao-parte2.pdf) | Slides da apresentação da Parte 2 |
+| [`slides/roteiro-de-fala-parte2.md`](slides/roteiro-de-fala-parte2.md) | Roteiro de apoio para a apresentação oral |
+| [`slides/apresentacao.pdf`](slides/apresentacao.pdf) | Slides da Parte 1 |
+| [`diagramas/jogo-multiplayer-c4.png`](diagramas/jogo-multiplayer-c4.png) | Diagrama C4 do jogo multiplayer (PNG; também em [SVG](diagramas/jogo-multiplayer-c4.svg)) |
 
 ## Resumo das decisões
 
-| Sistema | Estilo escolhido | Ideia central |
-|---|---|---|
-| **E-commerce** | **Microsserviços** com comunicação **orientada a eventos** | Escalar só o que está sob pressão e deixar cada time publicar sua parte sem depender dos outros |
-| **App bancário** | **Monolito modular** (em camadas, banco relacional único) | Consistência forte e segurança valem mais do que escala horizontal extrema |
-| **Jogo multiplayer** | **Cliente-servidor** com **servidor autoritativo** e WebSockets/UDP | Latência mínima e um único "juiz" do estado do jogo |
+| Sistema | Estilo definitivo | Atributo ISO 25010 mais importante | ADR |
+|---|---|---|---|
+| **E-commerce** | Microsserviços com eventos | Eficiência de desempenho › Capacidade (escalabilidade elástica) | [ADR-001](adr/adr-001-ecommerce.md) |
+| **App bancário** | Monolito modular | Segurança (integridade e responsabilização) | [ADR-002](adr/adr-002-app-bancario.md) |
+| **Jogo multiplayer** | Cliente-servidor autoritativo | Eficiência de desempenho › Comportamento no tempo (latência) | [ADR-003](adr/adr-003-jogo-multiplayer.md) |
 
 ---
 
-## Parte 1 — Análise dos sistemas
+## Parte 1 — Refinamento dos requisitos
 
-### 1.1 E-commerce — "MercadoGrande"
+### Como classificamos
 
-**Contexto (premissas do grupo):** loja online de varejo com milhões de produtos e vários times de desenvolvimento, cada um dono de uma área: catálogo, busca, carrinho, pedidos, pagamentos e logística. O tráfego normal é estável, mas em datas como a Black Friday ele multiplica várias vezes, principalmente em catálogo, busca e carrinho.
+- **Prioridade:**
+  - **P1 (crítico):** define a arquitetura. Se falhar, o sistema falha no seu propósito.
+  - **P2 (importante):** muito relevante, mas a arquitetura pode atendê-lo com mais de um caminho.
+  - **P3 (desejável):** vale buscar, mas cede em caso de conflito com os de cima.
+- **Característica ISO/IEC 25010:** associamos cada requisito a uma característica do modelo de qualidade de produto da norma, usando a terminologia mais difundida (a edição de 2023 atualizou alguns nomes).
+- **Meta:** valores de exemplo escolhidos pelo grupo para tornar o requisito **mensurável**. São premissas do estudo de caso, e não medições reais.
 
-**Requisitos não funcionais críticos**
+### 1.1 E-commerce (MercadoGrande)
 
-| Requisito | Por que importa neste sistema |
-|---|---|
-| **Escalabilidade seletiva (picos)** | Na Black Friday, busca e carrinho recebem muito mais carga do que o cadastro de clientes. Escalar tudo junto desperdiça dinheiro. |
-| **Alta disponibilidade e tolerância a falhas** | Se as "recomendações" caírem, o cliente ainda precisa conseguir comprar. Cada minuto fora do ar é venda perdida. |
-| **Consistência eventual (na maior parte)** | Pode haver pequeno atraso para refletir uma mudança de preço ou de estoque exibido. Só o pagamento e a reserva de estoque exigem rigor. |
-| **Desempenho de leitura** | Busca e páginas de produto precisam responder rápido, ou o cliente desiste. |
-| **Evolutividade / autonomia dos times** | Times diferentes precisam publicar novas versões no seu ritmo, sem coordenar um "deploy de tudo". |
+| Prioridade | Requisito não funcional | Meta (exemplo) | ISO 25010 |
+|---|---|---|---|
+| **P1** | **Escalabilidade elástica** (picos como a Black Friday) | Absorver picos de até ~10x o tráfego médio sem intervenção manual | Eficiência de desempenho › Capacidade |
+| P2 | Disponibilidade e tolerância a falhas | 99,95% no fluxo de compra; falha em recomendações não impede a compra | Confiabilidade › Disponibilidade, tolerância a falhas |
+| P2 | Desempenho de leitura (busca e produto) | 95% das respostas em menos de 300 ms | Eficiência de desempenho › Comportamento no tempo |
+| P2 | Autonomia de evolução dos times | Cada time publica sem depender de um lançamento conjunto | Manutenibilidade › Modularidade, modificabilidade |
+| P2 | Segurança dos dados de pagamento | Dados de cartão tratados pelo parceiro de pagamento, nunca guardados por nós | Segurança › Confidencialidade |
+| P3 | Consistência eventual (exceto pagamento e estoque) | Atraso de poucos segundos aceitável na vitrine; rigor no pagamento | Adequação funcional › Corretude funcional |
 
-### 1.2 App bancário — "BancoDigital Alfa"
+> **Atributo mais importante:** **Eficiência de desempenho (Capacidade)**, com a Confiabilidade logo atrás. O negócio vive de absorver picos sem cair.
 
-**Contexto (premissas do grupo):** banco digital com conta corrente, extrato, transferências, Pix e cartões. O sistema lida com dinheiro real e com exigências regulatórias e de proteção de dados (como a LGPD). Uma equipe de porte médio, com perfil mais conservador, mantém o sistema.
+### 1.2 App bancário (BancoDigital Alfa)
 
-**Requisitos não funcionais críticos**
+| Prioridade | Requisito não funcional | Meta (exemplo) | ISO 25010 |
+|---|---|---|---|
+| **P1** | **Segurança** (autenticação, criptografia, antifraude) | Autenticação forte (MFA); criptografia em trânsito e em repouso; controle de acesso por perfil | Segurança › Confidencialidade, autenticidade |
+| **P1** | **Consistência forte (ACID)** | Zero perda ou duplicação de transações; saldo sempre correto | Segurança › Integridade |
+| **P1** | **Auditoria** | 100% das operações registradas, de forma que não possa ser alterada | Segurança › Responsabilização, não repúdio |
+| P2 | Disponibilidade 24x7 (Pix) | 99,99%; recuperação em minutos (RTO) e sem perda de dados (RPO = 0) | Confiabilidade › Disponibilidade, recuperabilidade |
+| P2 | Desempenho previsível | 95% das transferências confirmadas em menos de 2 s | Eficiência de desempenho › Comportamento no tempo |
+| P3 | Escalabilidade | Crescimento previsível e planejado | Eficiência de desempenho › Capacidade |
+| P3 | Facilidade de manutenção | Módulos com fronteiras claras e testáveis | Manutenibilidade › Modularidade, testabilidade |
 
-| Requisito | Por que importa neste sistema |
-|---|---|
-| **Segurança extrema** | Autenticação forte, criptografia e controle de acesso rígido. Um vazamento ou fraude é um dano grave à confiança e ao negócio. |
-| **Consistência forte (ACID)** | O saldo nunca pode ficar errado: uma transferência debita e credita **junto**, ou não acontece. |
-| **Auditoria e rastreabilidade** | É preciso saber quem fez o quê e quando, com registros que não podem ser alterados. É uma exigência regulatória. |
-| **Disponibilidade 24x7** | O Pix funciona o tempo todo, então o sistema precisa se recuperar rápido de falhas. |
-| **Previsibilidade** | O comportamento deve ser correto e previsível, mais importante do que velocidade máxima. |
+> **Atributo mais importante:** **Segurança**, principalmente a **integridade** (o saldo nunca errado) e a **responsabilização** (auditoria). Aqui, errar custa mais do que ser lento.
 
-### 1.3 Jogo multiplayer — "Arena Online"
+### 1.3 Jogo multiplayer (Arena Online)
 
-**Contexto (premissas do grupo):** jogo competitivo em tempo real, com partidas curtas entre cerca de 10 jogadores. Cada jogador precisa ver o mesmo mundo, quase ao mesmo tempo que os outros. Trapaça arruína a experiência e o negócio do jogo.
+| Prioridade | Requisito não funcional | Meta (exemplo) | ISO 25010 |
+|---|---|---|---|
+| **P1** | **Latência ultrabaixa** | Atraso de ida e volta de até ~50 ms para a região do jogador; atualização do jogo de 30 a 60 vezes por segundo | Eficiência de desempenho › Comportamento no tempo |
+| P2 | Sincronização de estado em tempo real | Todos os jogadores veem o mesmo estado, com diferença imperceptível | Adequação funcional › Corretude funcional |
+| P2 | Resistência a trapaças | Decisões do jogo tomadas só no servidor | Segurança › Integridade |
+| P2 | Escalabilidade por partida | Subir e descer servidores conforme o número de partidas | Eficiência de desempenho › Capacidade |
+| P3 | Tolerância a falhas | Queda de um servidor afeta só a partida dele | Confiabilidade › Tolerância a falhas |
+| P3 | Custo de infraestrutura | Pagar proporcionalmente às partidas em andamento | Eficiência de desempenho › Utilização de recursos |
 
-**Requisitos não funcionais críticos**
-
-| Requisito | Por que importa neste sistema |
-|---|---|
-| **Latência ultrabaixa** | Cada atraso de dezenas de milissegundos é sentido pelo jogador. |
-| **Tempo real** | O estado do jogo é atualizado várias vezes por segundo (dezenas de "ticks" por segundo). |
-| **Sincronização de estado** | Todos os jogadores devem concordar sobre onde cada um está e o que aconteceu. |
-| **Resistência a trapaças** | A decisão final sobre o que vale não pode ficar na máquina do jogador. |
-| **Escalabilidade por partida** | O número de partidas simultâneas varia ao longo do dia, e a infraestrutura deve crescer e encolher junto. |
-
----
-
-## Parte 2 — Decisão e justificativa
-
-> A comparação ponderada que apoia estas escolhas está em [`docs/matriz-de-decisao.md`](docs/matriz-de-decisao.md).
-
-### 2.1 E-commerce → Microsserviços com comunicação orientada a eventos
-
-**Justificativa técnica**
-- **Escala seletiva:** busca, catálogo e carrinho recebem a maior parte da carga na Black Friday. Em microsserviços, cada um escala sozinho, e os demais continuam pequenos.
-- **Isolamento de falhas:** se o serviço de recomendações cair, o checkout continua funcionando. Num monolito, um defeito pode derrubar tudo.
-- **Consistência eventual com eventos:** quando um pedido é confirmado, o serviço de pedidos publica um evento, e estoque, logística e notificações reagem a ele sem travar o cliente. Para o fluxo pedido–pagamento–estoque, usa-se uma **Saga** (uma sequência de passos com compensação, por exemplo, estornar o pagamento se o estoque acabar).
-
-**Justificativa de negócio**
-- Os times de catálogo, pagamentos e logística conseguem **publicar versões de forma independente**, lançando mais rápido e com menos risco de "quebrar o outro time".
-- Escalar só as partes sob pressão **reduz o custo** de infraestrutura nos picos.
-- Cada minuto de indisponibilidade na Black Friday tem custo direto em vendas.
-
-**Alternativas descartadas**
-- *Monolito (simples ou modular):* é o melhor ponto de partida para um produto novo, mas escala tudo junto e acopla as publicações de vários times. No contexto do MercadoGrande (muitos times, picos fortes), vira gargalo.
-- *SOA com barramento (ESB):* o barramento central vira ponto único de falha e de gargalo organizacional.
-
-**Trade-offs que aceitamos (e como lidar)**
-- **Complexidade operacional:** muitos serviços, rede entre eles, e depuração mais difícil. *Mitigação:* automação de implantação, monitoramento centralizado e rastreamento distribuído desde o início.
-- **Consistência eventual:** o sistema precisa tolerar estados intermediários (por exemplo, "pedido recebido, aguardando confirmação"). *Mitigação:* mostrar o status claramente ao cliente e usar Sagas nos fluxos críticos.
-- **Exige maturidade da equipe.** Esta decisão **só vale se a equipe estiver preparada** para operar sistemas distribuídos.
-
-**Quando reavaliar:** se a empresa fosse pequena (poucos desenvolvedores, produto em validação), recomendaríamos **começar por um monolito modular** e extrair serviços aos poucos, conforme a dor aparecer.
-
-### 2.2 App bancário → Monolito modular
-
-**Justificativa técnica**
-- **Consistência forte e controle transacional:** com um único banco relacional e um único processo, uma transferência (débito + crédito) é uma **transação ACID** simples e confiável. Em microsserviços, o mesmo resultado exigiria transações distribuídas ou Sagas, mais difíceis de garantir.
-- **Segurança:** um único ponto de entrada e menos serviços em rede significam **menor superfície de ataque** e um perímetro mais fácil de proteger e de auditar.
-- **Auditoria:** a trilha de auditoria (registro de quem fez o quê, só de inclusão) fica na mesma transação da operação, então nunca há operação sem registro.
-- **Modular, e não "bagunçado":** o código é dividido em módulos com fronteiras claras (contas, transferências/Pix, cartões, extrato, antifraude). Isso mantém a organização e deixa a porta aberta para separar um módulo no futuro.
-
-**Justificativa de negócio**
-- Num banco, **errar o saldo custa mais do que ser lento**: multas, perda de confiança e risco regulatório.
-- Uma equipe de porte médio **entrega com menos custo** e menos risco operacional num monolito do que operando dezenas de serviços.
-- Menos peças móveis reduzem o custo de conformidade e de auditoria.
-
-**Alternativas descartadas**
-- *Microsserviços:* resolvem escala horizontal extrema, que não é a maior dor deste banco, e trazem transações distribuídas, mais superfície de ataque e custo operacional.
-- *Orientado a eventos puro (event sourcing):* excelente para auditoria, mas muito complexo para a equipe. Aproveitamos a ideia de forma simples, com uma trilha de auditoria só de inclusão.
-- *Monolito sem módulos:* é simples no início, mas tende a virar uma "bola de lama" difícil de manter.
-
-**Trade-offs que aceitamos (e como lidar)**
-- **Escala:** escala principalmente na vertical, com réplicas de leitura para extrato e consultas. *Mitigação:* o tráfego de um banco é previsível, e a leitura pesada vai para réplicas.
-- **Publicação:** uma nova versão mexe no sistema inteiro. *Mitigação:* testes automatizados fortes, implantações graduais e janelas controladas.
-- **Disponibilidade:** o monolito é um ponto único. *Mitigação:* várias instâncias atrás de um balanceador, banco com failover automático e várias zonas de disponibilidade.
-
-**Quando reavaliar:** se algum módulo passar a exigir escala própria ou ritmo de entrega diferente (por exemplo, notificações ou o gateway do Pix), ele pode ser **extraído** como serviço, sem refazer o resto.
-
-### 2.3 Jogo multiplayer → Cliente-servidor com servidor autoritativo (WebSockets/UDP)
-
-**Justificativa técnica**
-- **Latência mínima:** o jogador mantém uma conexão **contínua e direta** com o servidor da sua partida (WebSocket ou UDP), sem saltos intermediários. Cada chamada HTTP entre serviços acrescentaria atraso que o jogador sentiria.
-- **Servidor autoritativo:** o servidor é o "juiz": recebe os comandos dos jogadores, valida, calcula o estado do jogo e envia o resultado a todos. Isso garante **sincronização** (todos veem o mesmo mundo) e **impede trapaças** (o cliente não decide nada).
-- **Escala por partida:** cada partida roda em seu próprio processo de servidor. Um orquestrador liga e desliga servidores conforme a demanda. Só o que não é tempo real (login, matchmaking, ranking) fica em serviços separados, comuns, via HTTPS.
-
-**Justificativa de negócio**
-- A **experiência do jogador** (fluidez e justiça) decide se ele continua jogando e pagando.
-- Trapaça afasta jogadores honestos. O servidor autoritativo protege a **reputação** do jogo.
-- Pagar por servidores só quando há partidas mantém o **custo** proporcional à receita.
-
-**Alternativas descartadas**
-- *Microsserviços para o laço do jogo:* excesso de chamadas pela rede mata a latência (a dica do enunciado vale aqui). Usamos serviços separados **apenas** fora do tempo real.
-- *Peer-to-Peer (P2P):* baixa o custo de servidor, mas sem juiz central é fácil trapacear, fica difícil sincronizar o estado e há problemas de conexão entre jogadores (como NAT).
-- *Orientado a eventos com broker:* a fila intermediária acrescenta atraso. Serve bem para o que acontece **depois** da partida (como enviar o resultado ao ranking), não durante.
-
-**Trade-offs que aceitamos (e como lidar)**
-- **Custo de servidores:** é preciso manter servidores de jogo. *Mitigação:* orquestrador com escala automática, desligando servidores ociosos.
-- **Atraso para quem está longe do servidor:** *Mitigação:* servidores em várias regiões e predição de movimento no cliente (o jogo parece mais fluido).
-- **Queda de um servidor derruba as partidas dele:** *Mitigação:* partidas curtas, e o jogador volta ao matchmaking rapidamente.
-
-**Quando reavaliar:** se o jogo ganhar modos cooperativos casuais sem competição, avaliar P2P ou híbrido para reduzir custo. Se o ecossistema de serviços de apoio crescer muito (loja, clãs, eventos), pode-se evoluir esses serviços de apoio para microsserviços, **mantendo** o servidor de jogo como está.
+> **Atributo mais importante:** **Eficiência de desempenho (Comportamento no tempo)**. Num jogo em tempo real, a latência é o produto.
 
 ---
 
-## Parte 3 — Apresentação e diagrama bônus
+## Parte 2 — A defesa arquitetural (ADRs)
 
-- **Slides da apresentação oral:** [`slides/apresentacao.pdf`](slides/apresentacao.pdf), com um [roteiro de fala](slides/roteiro-de-fala.md) como apoio. Os slides são visuais e curtos, para o grupo defender as escolhas falando e não lendo.
-- **Bônus: diagrama C4 do jogo multiplayer (nível de contêineres):** mostra como o jogador, o cliente, o servidor de jogo e os serviços de apoio se comunicam. A seta laranja destaca o caminho de tempo real, e as demais são chamadas comuns.
+Um **ADR (Architecture Decision Record)** registra uma decisão importante, o contexto em que foi tomada e suas consequências. Abaixo está a versão resumida de cada um. As versões completas, com alternativas, mitigações e gatilhos de revisão, estão na pasta [`adr/`](adr/).
+
+### ADR-001 — E-commerce: Microsserviços com eventos
+
+- **Status:** Aceito
+- **Contexto:** loja online com muitos times e picos sazonais (Black Friday). Lentidão no pico significa vendas perdidas. Cada time precisa lançar no seu ritmo, e pagar por servidores dimensionados para o pico o ano todo é caro.
+- **Decisão:** Microsserviços, um por área de negócio, cada um com seu banco. Comunicação por **eventos** (message broker), com chamadas síncronas só onde a resposta é imediata (pagamento). **Saga** no fluxo pedido → pagamento → estoque. API Gateway com cache e CDN, e escala elástica por serviço.
+- **Consequências:**
+  - ✅ **Prós:** escalabilidade independente (só busca e carrinho crescem no pico, o que reduz custo), isolamento de falhas, deploy independente por time, filas que amortecem picos.
+  - ❌ **Contras (o que assumimos):** maior **complexidade de monitoramento e de comunicação de rede**, consistência eventual (estados intermediários), Sagas e testes de ponta a ponta mais difíceis, governança de contratos entre times, custo fixo de plataforma, e exige equipe madura.
+- **Quando reavaliar:** se a equipe não conseguir operar a plataforma, ou se o custo fixo superar o ganho. Para uma empresa pequena, **começar por um monolito modular**.
+
+### ADR-002 — App bancário: Monolito modular
+
+- **Status:** Aceito
+- **Contexto:** banco digital que movimenta dinheiro real, sob exigências regulatórias e de proteção de dados. Errar um saldo custa mais do que ser lento. Pix 24x7. Equipe de porte médio.
+- **Decisão:** Monolito Modular em camadas, com **um único banco relacional**. Módulos com fronteiras claras (contas, transferências/Pix, cartões, extrato, antifraude), **trilha de auditoria somente de inclusão** na mesma transação, várias instâncias atrás de balanceador, banco com failover e réplicas de leitura.
+- **Consequências:**
+  - ✅ **Prós:** transações ACID simples e confiáveis, menor superfície de ataque, auditoria na mesma transação, menor custo e risco operacional, evolução segura pelas fronteiras entre módulos.
+  - ❌ **Contras (o que assumimos):** escala principalmente **vertical** (o banco único tem teto), publicação do sistema inteiro a cada versão, efeito dominó em falhas, risco de erosão da modularidade, tecnologia única, e o banco como ponto único de falha (exige failover).
+- **Quando reavaliar:** se um módulo (como o Pix) precisar de escala ou ritmo próprios, ele é **extraído como serviço**.
+
+### ADR-003 — Jogo multiplayer: Cliente-servidor autoritativo
+
+- **Status:** Aceito
+- **Contexto:** jogo competitivo em tempo real, partidas curtas de ~10 jogadores. A experiência (fluidez e justiça) decide a retenção. Trapaça afasta jogadores honestos. A demanda varia muito, principalmente no lançamento.
+- **Decisão:** **Cliente-servidor com servidor autoritativo**: um servidor de jogo por partida, comunicação em tempo real por **WebSockets/UDP**, predição de movimento no cliente. Serviços de apoio (autenticação, matchmaking, ranking) separados e fora do tempo real, via HTTPS. Um **orquestrador** liga e desliga servidores conforme a demanda.
+- **Consequências:**
+  - ✅ **Prós:** latência mínima, anti-trapaça (só o servidor decide), sincronização consistente, escala simples por partida, custo proporcional ao uso.
+  - ❌ **Contras (o que assumimos):** custo de servidores dedicados, latência para quem está longe (exige várias regiões), a queda de um servidor derruba a partida, **netcode complexo no cliente**, orquestrador de frota a manter, e servidores como alvo de DDoS.
+- **Quando reavaliar:** modos cooperativos casuais (onde P2P ou híbrido reduziria custo) ou crescimento dos serviços de apoio (que podem virar microsserviços, mantendo o servidor de jogo).
+
+---
+
+## Parte 3 — Apresentação para a "diretoria"
+
+- **Slides:** [`slides/apresentacao-parte2.pdf`](slides/apresentacao-parte2.pdf), com o [roteiro de fala](slides/roteiro-de-fala-parte2.md) como apoio. Usam **analogias visuais** (food truck × praça de alimentação, cozinha única com estações, árbitro de futebol) e traduzem cada decisão técnica em **dinheiro, prazo e risco**.
+- **Diagrama C4 (nível de contêineres) do jogo multiplayer**, presente nos slides: a seta laranja é o caminho de tempo real entre o jogador e o servidor de jogo.
 
 ![Diagrama C4 do jogo multiplayer](diagramas/jogo-multiplayer-c4.png)
+
+### Bônus — Simulação de crise: "E se este sistema crescer 10x em 1 mês?"
+
+A análise completa está em [`docs/simulacao-de-crise.md`](docs/simulacao-de-crise.md). Resumo:
+
+| Sistema | Cenário de crise | Aguenta? | Principal gargalo | Resposta |
+|---|---|---|---|---|
+| **E-commerce** | Black Friday permanente (10x de usuários) | **Sim**, com preparo prévio | Banco de pedidos e parceiro de pagamento | Testes de carga, particionar o banco, combinar limites com o parceiro, degradação planejada |
+| **App bancário** | Ataque hacker e pico de transações | **Até certo ponto** | Banco único de escrita | Extrair o módulo do Pix, particionar por conta, proteção na borda |
+| **Jogo multiplayer** | Lançamento com 10x de jogadores | **Sim**, com servidores pré-aquecidos | Login e matchmaking no minuto do lançamento | Fila de login, reserva de servidores e de cota de máquinas |
+
+A lição comum: **o que não guarda estado escala em minutos, mas o que guarda dados precisa de preparo de semanas.**
 
 ---
 
 ## Parte 4 — Reflexão
 
-**Por que não existe uma "bala de prata" (a arquitetura perfeita para tudo) na engenharia de software? Como o contexto de negócio (orçamento, equipe, tempo de mercado) influencia a escolha do estilo arquitetural?**
+**Por que a documentação de uma decisão arquitetural (ADR) é tão importante quanto o diagrama em si? Como defender uma escolha técnica para um stakeholder que só se importa com dinheiro e prazos?**
 
-Não existe arquitetura perfeita porque **todo estilo é uma troca (trade-off)**: o que ele facilita, ele paga em outro lugar. Este estudo mostra isso bem. **Microsserviços** resolvem problemas de escala e de autonomia de times, mas cobram em **complexidade operacional**: rede, monitoramento, consistência eventual. Um **monolito** é muito mais fácil de começar, de testar e de manter consistente, mas, se crescer sem organização, vira um pesadelo em que qualquer mudança é arriscada. Um **servidor autoritativo** dá latência baixa e proteção contra trapaça, mas custa servidores. Os requisitos de um banco (consistência forte, auditoria) e os de um jogo (latência ultrabaixa) são tão diferentes que o mesmo estilo não serviria bem aos dois. Um sistema que otimiza tudo ao mesmo tempo não existe. Por isso a pergunta certa nunca é "qual é a melhor arquitetura?", e sim **"qual é a melhor arquitetura para este problema, agora?"**.
+### Por que o ADR importa tanto quanto o diagrama
 
-O **contexto de negócio** pesa tanto quanto os requisitos técnicos:
+O diagrama mostra **o quê**: quais são as peças e como elas se conectam. Mas ele não explica **por que** o sistema é assim, e é justamente o "porquê" que se perde com o tempo. Pessoas saem da equipe, chegam outras, e daqui a um ano alguém olha o diagrama e pergunta: "por que usamos um único banco aqui? Isso não é um erro?". Sem registro, a equipe nova tende a **desfazer boas decisões** (porque não entende o motivo) ou a **repetir discussões antigas** (porque ninguém lembra que as alternativas já foram avaliadas).
 
-- **Equipe:** microsserviços exigem gente experiente em sistemas distribuídos, automação e monitoramento. Com uma equipe pequena ou iniciante, o custo de operar tudo isso pode superar o benefício.
-- **Orçamento:** muitos serviços, bancos e ferramentas custam dinheiro e tempo. Um monolito é mais barato de começar. Já pagar por escala que ninguém usa também é desperdício.
-- **Tempo de mercado:** uma startup que precisa validar uma ideia em semanas se beneficia de um monolito simples. A mesma empresa, anos depois e com vários times, pode precisar separá-lo.
-- **Risco e regulação:** num banco, o custo do erro é altíssimo, e isso favorece a simplicidade transacional e a facilidade de auditar.
+O ADR guarda três coisas que o diagrama não guarda:
 
-Por isso a escolha depende do **momento da empresa** e **não é definitiva**: uma boa arquitetura começa pelo estilo mais simples que atende aos requisitos críticos e evolui quando o negócio muda, como na nossa recomendação de "começar com monolito modular" para um e-commerce pequeno. Também é por isso que seguir a "moda" é um erro: microsserviços em tudo teriam prejudicado o banco (complexidade e consistência) e o jogo (latência), e foi justamente analisar os trade-offs que nos levou a três estilos diferentes para três sistemas diferentes.
+1. **O contexto:** em que situação a decisão foi tomada (equipe, prazo, requisitos, orçamento daquele momento).
+2. **As alternativas descartadas e por quê:** evita rediscutir o que já foi pensado.
+3. **As consequências, inclusive as ruins:** a "dívida" que assumimos de propósito. Com isso, quando o contra aparece (por exemplo, o banco único chegando ao limite), a equipe sabe que **não é uma surpresa nem uma falha**, e sim algo previsto, com um gatilho de revisão já definido.
+
+Por isso, o ADR é como o **registro de obras** de uma casa, e o diagrama é só a planta. A planta mostra onde estão as paredes, mas só o registro conta por que aquela parede é mais grossa: ela sustenta o andar de cima. Quem reformar sem ler o registro pode derrubar a casa.
+
+### Como defender uma escolha para quem só pensa em dinheiro e prazos
+
+A regra é **traduzir o argumento técnico em impacto de negócio**. O stakeholder não precisa entender "consistência eventual" ou "latência de rede", mas entende **custo, prazo e risco**. Foi isso que fizemos na apresentação:
+
+| Argumento técnico | Tradução para a diretoria |
+|---|---|
+| E-commerce: microsserviços com escala independente | "Pagamos só pelos servidores que o pico realmente usa, em vez de manter o ano todo uma estrutura gigante ociosa. E as equipes lançam sem esperar umas pelas outras, então as novidades chegam **mais rápido** ao cliente." |
+| App bancário: monolito modular com banco único | "Reduzimos o risco de **erro de saldo, multa e fraude**, que custam muito mais do que qualquer economia. E operar uma peça só é **mais barato** para uma equipe do nosso tamanho." |
+| Jogo: servidor autoritativo | "O jogo fica fluido e justo, e jogador que se diverte **continua jogando e pagando**. Os servidores só ficam ligados quando há partidas, então o custo acompanha a receita." |
+
+Quatro práticas ajudam a defender a escolha com credibilidade:
+
+- **Falar do custo da escolha antes de ser perguntado.** "Esta decisão tem um preço: mais complexidade de monitoramento. Veja como vamos pagá-lo." Quem mostra o lado ruim ganha confiança. Quem esconde perde.
+- **Usar analogias.** Food truck × praça de alimentação explica em 10 segundos o que 10 minutos de jargão não explicam.
+- **Comparar cenários em dinheiro e tempo:** "Se escolhermos X, entregamos em N meses e custa Y. Se escolhermos Z, é mais rápido, mas ficaremos presos a W."
+- **Mostrar o pior cenário e o plano:** a simulação de "e se crescermos 10x em 1 mês?" mostra maturidade, porque o stakeholder vê que a equipe já pensou no que pode dar errado e no que fará.
+
+No fim, **um bom arquiteto é um tradutor**: converte a complexidade da engenharia em decisões de negócio, e registra o raciocínio (no ADR) para que a decisão sobreviva às pessoas que a tomaram.
