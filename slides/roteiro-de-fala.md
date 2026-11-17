@@ -1,12 +1,10 @@
 # Roteiro de fala — apresentação oral (~10 minutos)
 
-Apoio para o grupo. **Não leiam os slides**: eles têm pouco texto de propósito. Usem o roteiro como lembrete do que falar e foquem em **defender por que a escolha faz sentido para o negócio**.
-
-Sugestão de divisão: **Integrante 1** (slides 1–4), **Integrante 2** (slides 5–8), **Integrante 3** (slides 9–12). Ajustem conforme o tamanho do grupo.
+Apoio para a apresentação. **Não leia os slides**: eles têm pouco texto de propósito. Use o roteiro como lembrete do que falar e foque em **defender por que a escolha faz sentido para o negócio**.
 
 | Slide | Tempo | O que dizer |
 |---|---|---|
-| **1. Capa** | 0:30 | Apresentar o grupo e o desafio: escolher o estilo arquitetural de três sistemas bem diferentes. Adiantar a ideia central: **cada sistema pede um estilo diferente**. |
+| **1. Capa** | 0:30 | Apresentar o desafio: escolher o estilo arquitetural de três sistemas bem diferentes. Adiantar a ideia central: **cada sistema pede um estilo diferente**. |
 | **2. Método** | 1:00 | Explicar que não escolhemos por moda. Primeiro olhamos os **requisitos críticos**, depois comparamos estilos e, por fim, declaramos o **preço** de cada escolha. A matriz de decisão com os pesos está no repositório. |
 | **3. E-commerce: requisitos** | 1:00 | O MercadoGrande tem muitos times e picos como a Black Friday. O ponto-chave: **não precisa escalar tudo, só o que está sob pressão**. Citar o exemplo das recomendações que podem cair sem derrubar a compra. |
 | **4. E-commerce: decisão** | 1:30 | Microsserviços com eventos. Falar do **negócio**: times publicam sozinhos, custo menor no pico, falha isolada. **Assumir o preço**: complexidade operacional e consistência eventual (Saga no pedido). Frisar a condição: só vale com equipe madura. Se a empresa fosse pequena, começaríamos por monolito modular. |

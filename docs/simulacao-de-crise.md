@@ -2,7 +2,7 @@
 
 Pensar no pior cenário mostra até onde cada arquitetura aguenta e onde ela vai doer. Para cada sistema usamos o cenário de crise mais realista para ele. Para o crescimento, a regra é a mesma: **o que não guarda estado escala em minutos, mas o que guarda dados (bancos) precisa de preparo de semanas**. Por isso o "1 mês" é curto e pede ação imediata.
 
-> As respostas descrevem a arquitetura do grupo em um cenário hipotético. Os números do enunciado (10x em 1 mês) são o cenário de teste, e não medições reais.
+> As respostas descrevem a arquitetura proposta em um cenário hipotético. Os números do enunciado (10x em 1 mês) são o cenário de teste, e não medições reais.
 
 ## 1. E-commerce — Black Friday permanente (10x de usuários)
 

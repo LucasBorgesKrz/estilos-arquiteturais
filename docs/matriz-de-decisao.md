@@ -3,11 +3,11 @@
 Para que a escolha não seja só opinião, comparamos os estilos candidatos de cada sistema contra os **requisitos não funcionais críticos**.
 
 **Como ler:**
-- Cada critério tem um **peso** (a soma é 100), definido pelo grupo conforme a importância para o negócio daquele sistema.
+- Cada critério tem um **peso** (a soma é 100), definido conforme a importância para o negócio daquele sistema.
 - Cada estilo recebe uma **nota de 1 a 5** em cada critério (5 = atende muito bem).
 - A **nota final** é a média ponderada (de 1 a 5).
 
-> **Aviso:** as notas são um **julgamento do grupo**, baseado em conhecimento geral de arquitetura, e não uma medição. O valor da matriz é deixar os trade-offs explícitos e discutíveis. Se mudarem os pesos (por exemplo, uma startup que valoriza muito a velocidade), o resultado pode mudar. Esse é justamente o ponto da reflexão no README: o contexto de negócio influencia a escolha.
+> **Aviso:** as notas são um **julgamento próprio do autor**, baseado em conhecimento geral de arquitetura, e não uma medição. O valor da matriz é deixar os trade-offs explícitos e discutíveis. Se mudarem os pesos (por exemplo, uma startup que valoriza muito a velocidade), o resultado pode mudar. Esse é justamente o ponto da reflexão no README: o contexto de negócio influencia a escolha.
 
 ## 1. E-commerce
 

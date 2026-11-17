@@ -41,7 +41,7 @@ Na Parte 1 escolhemos o estilo arquitetural de **três sistemas fictícios**. Ag
   - **P2 (importante):** muito relevante, mas a arquitetura pode atendê-lo com mais de um caminho.
   - **P3 (desejável):** vale buscar, mas cede em caso de conflito com os de cima.
 - **Característica ISO/IEC 25010:** associamos cada requisito a uma característica do modelo de qualidade de produto da norma, usando a terminologia mais difundida (a edição de 2023 atualizou alguns nomes).
-- **Meta:** valores de exemplo escolhidos pelo grupo para tornar o requisito **mensurável**. São premissas do estudo de caso, e não medições reais.
+- **Meta:** valores de exemplo escolhidos neste estudo para tornar o requisito **mensurável**. São premissas do estudo de caso, e não medições reais.
 
 ### 1.1 E-commerce (MercadoGrande)
 

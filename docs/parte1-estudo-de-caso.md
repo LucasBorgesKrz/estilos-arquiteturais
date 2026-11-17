@@ -1,7 +1,6 @@
 # Estudo de Caso — Parte 1: Escolha de Estilos Arquiteturais
 
 **Disciplina:** Arquitetura de Software
-**Integrantes do grupo:** _(preencher com nomes e matrículas)_
 
 > Documento da Parte 1 do estudo de caso, mantido aqui como histórico. A Parte 2 (ADRs, RNFs priorizados e simulação de crise) está no [README principal](../README.md). Entrega 100% teórica/modelagem: este repositório não contém código. Reúne a análise dos sistemas, as decisões justificadas, os slides da apresentação e um diagrama de alto nível.
 
@@ -32,7 +31,7 @@ Escolhemos o estilo arquitetural de **três sistemas fictícios** com necessidad
 
 ### 1.1 E-commerce — "MercadoGrande"
 
-**Contexto (premissas do grupo):** loja online de varejo com milhões de produtos e vários times de desenvolvimento, cada um dono de uma área: catálogo, busca, carrinho, pedidos, pagamentos e logística. O tráfego normal é estável, mas em datas como a Black Friday ele multiplica várias vezes, principalmente em catálogo, busca e carrinho.
+**Contexto (premissas do estudo):** loja online de varejo com milhões de produtos e vários times de desenvolvimento, cada um dono de uma área: catálogo, busca, carrinho, pedidos, pagamentos e logística. O tráfego normal é estável, mas em datas como a Black Friday ele multiplica várias vezes, principalmente em catálogo, busca e carrinho.
 
 **Requisitos não funcionais críticos**
 
@@ -46,7 +45,7 @@ Escolhemos o estilo arquitetural de **três sistemas fictícios** com necessidad
 
 ### 1.2 App bancário — "BancoDigital Alfa"
 
-**Contexto (premissas do grupo):** banco digital com conta corrente, extrato, transferências, Pix e cartões. O sistema lida com dinheiro real e com exigências regulatórias e de proteção de dados (como a LGPD). Uma equipe de porte médio, com perfil mais conservador, mantém o sistema.
+**Contexto (premissas do estudo):** banco digital com conta corrente, extrato, transferências, Pix e cartões. O sistema lida com dinheiro real e com exigências regulatórias e de proteção de dados (como a LGPD). Uma equipe de porte médio, com perfil mais conservador, mantém o sistema.
 
 **Requisitos não funcionais críticos**
 
@@ -60,7 +59,7 @@ Escolhemos o estilo arquitetural de **três sistemas fictícios** com necessidad
 
 ### 1.3 Jogo multiplayer — "Arena Online"
 
-**Contexto (premissas do grupo):** jogo competitivo em tempo real, com partidas curtas entre cerca de 10 jogadores. Cada jogador precisa ver o mesmo mundo, quase ao mesmo tempo que os outros. Trapaça arruína a experiência e o negócio do jogo.
+**Contexto (premissas do estudo):** jogo competitivo em tempo real, com partidas curtas entre cerca de 10 jogadores. Cada jogador precisa ver o mesmo mundo, quase ao mesmo tempo que os outros. Trapaça arruína a experiência e o negócio do jogo.
 
 **Requisitos não funcionais críticos**
 
@@ -154,7 +153,7 @@ Escolhemos o estilo arquitetural de **três sistemas fictícios** com necessidad
 
 ## Parte 3 — Apresentação e diagrama bônus
 
-- **Slides da apresentação oral:** [`slides/apresentacao.pdf`](../slides/apresentacao.pdf), com um [roteiro de fala](../slides/roteiro-de-fala.md) como apoio. Os slides são visuais e curtos, para o grupo defender as escolhas falando e não lendo.
+- **Slides da apresentação oral:** [`slides/apresentacao.pdf`](../slides/apresentacao.pdf), com um [roteiro de fala](../slides/roteiro-de-fala.md) como apoio. Os slides são visuais e curtos, para defender as escolhas falando e não lendo.
 - **Bônus: diagrama C4 do jogo multiplayer (nível de contêineres):** mostra como o jogador, o cliente, o servidor de jogo e os serviços de apoio se comunicam. A seta laranja destaca o caminho de tempo real, e as demais são chamadas comuns.
 
 ![Diagrama C4 do jogo multiplayer](../diagramas/jogo-multiplayer-c4.png)

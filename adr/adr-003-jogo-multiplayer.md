@@ -4,7 +4,7 @@
 |---|---|
 | **Status** | **Aceito** |
 | **Data** | 16/11/2026 |
-| **Decisores** | Grupo (arquitetura de software) |
+| **Decisor** | Autor do estudo de caso (arquitetura de software) |
 | **Atributo de qualidade principal (ISO 25010)** | Eficiência de desempenho › **Comportamento no tempo** (latência) |
 
 ## Contexto

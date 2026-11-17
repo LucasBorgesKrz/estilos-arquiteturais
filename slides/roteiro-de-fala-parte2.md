@@ -1,8 +1,6 @@
 # Roteiro de fala — Parte 2: defesa para a "diretoria" (~10 minutos)
 
-Apoio para o grupo. Vocês **não estão convencendo um computador, e sim pessoas**: o professor e a turma fazem o papel da diretoria, que se importa com **dinheiro, prazo e risco**. Falem nessa linguagem, usem as analogias e **não leiam os slides**.
-
-Sugestão de divisão: **Integrante 1** (slides 1–3), **Integrante 2** (slides 4–7), **Integrante 3** (slides 8–12). Ajustem ao tamanho do grupo.
+Apoio para a apresentação. Você **não está convencendo um computador, e sim pessoas**: o professor e a turma fazem o papel da diretoria, que se importa com **dinheiro, prazo e risco**. Fale nessa linguagem, use as analogias e **não leia os slides**.
 
 | Slide | Tempo | O que dizer |
 |---|---|---|
