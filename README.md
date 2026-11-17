@@ -1,7 +1,6 @@
 # Estudo de Caso — Escolha de Estilos Arquiteturais
 
 **Disciplina:** Arquitetura de Software
-**Integrantes do grupo:** _(preencher com nomes e matrículas)_
 
 > Entrega 100% teórica/modelagem: este repositório não contém código. Reúne a análise dos sistemas, as decisões justificadas, os slides da apresentação e um diagrama de alto nível.
 
