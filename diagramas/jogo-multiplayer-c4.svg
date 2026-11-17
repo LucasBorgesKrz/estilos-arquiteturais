@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="960" viewBox="0 0 1440 960" font-family="'Segoe UI', Arial, Helvetica, sans-serif">
+<defs>
+<marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="M1,1 L11,6 L1,11 Z" fill="#3B4252"/></marker>
+<marker id="ah" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto" markerUnits="userSpaceOnUse"><path d="M1,1 L13,7 L1,13 Z" fill="#E8590C"/></marker>
+<marker id="as" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1 L13,7 L1,13 Z" fill="#E8590C"/></marker>
+</defs>
+<style>.halo{paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}</style>
+<rect width="1440" height="960" fill="#fff"/>
+<text x="720" y="34" text-anchor="middle" font-size="23" font-weight="700" fill="#1A202C">Jogo Multiplayer “Arena Online” — Diagrama de Contêineres (C4, nível 2)</text>
+<text x="720" y="56" text-anchor="middle" font-size="13" font-weight="400" fill="#4A5568">Visão de alto nível, sem código: quem conversa com quem e por qual meio. A seta laranja é o caminho de tempo real.</text>
+<rect x="30" y="200" width="1380" height="640" rx="10" fill="none" stroke="#7A869A" stroke-width="1.6" stroke-dasharray="9 6"/>
+<text x="48" y="224" text-anchor="start" font-size="14" font-weight="700" fill="#4A5568">Jogo Multiplayer</text>
+<text x="48" y="241" text-anchor="start" font-size="11.5" font-weight="400" fill="#4A5568">[Sistema de software]</text>
+<circle cx="520" cy="82" r="20" fill="#08427B"/>
+<rect x="440" y="104" width="160" height="62" rx="12" fill="#08427B"/>
+<text x="520" y="128" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Jogador</text>
+<text x="520" y="148" text-anchor="middle" font-size="11" fill="#E2E8F0">[Pessoa]</text>
+<rect x="370" y="230" width="300" height="110" rx="8" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+<text x="520" y="254" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Cliente do Jogo</text>
+<text x="520" y="271" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: aplicativo PC/mobile]</text>
+<text x="520" y="293" text-anchor="middle" font-size="12" fill="#fff">Mostra o jogo, envia os comandos do</text>
+<text x="520" y="308" text-anchor="middle" font-size="12" fill="#fff">jogador e prevê o movimento localmente</text>
+<rect x="40" y="430" width="260" height="110" rx="8" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+<text x="170" y="454" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Serviço de Autenticação</text>
+<text x="170" y="471" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: API HTTPS]</text>
+<text x="170" y="493" text-anchor="middle" font-size="12" fill="#fff">Cadastro, login e emissão</text>
+<text x="170" y="508" text-anchor="middle" font-size="12" fill="#fff">do token de sessão</text>
+<rect x="390" y="430" width="260" height="110" rx="8" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+<text x="520" y="454" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Matchmaking</text>
+<text x="520" y="471" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: API HTTPS]</text>
+<text x="520" y="493" text-anchor="middle" font-size="12" fill="#fff">Forma partidas equilibradas e</text>
+<text x="520" y="508" text-anchor="middle" font-size="12" fill="#fff">indica o servidor de jogo</text>
+<rect x="750" y="430" width="260" height="110" rx="8" fill="#438DD5" stroke="#E8590C" stroke-width="4"/>
+<text x="880" y="454" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Servidor de Jogo</text>
+<text x="880" y="471" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: processo por partida]</text>
+<text x="880" y="493" text-anchor="middle" font-size="12" fill="#fff">Servidor autoritativo: roda o laço do jogo,</text>
+<text x="880" y="508" text-anchor="middle" font-size="12" fill="#fff">valida ações e sincroniza o estado</text>
+<rect x="1105" y="430" width="260" height="110" rx="8" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+<text x="1235" y="454" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Serviço de Ranking</text>
+<text x="1235" y="471" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: API HTTPS]</text>
+<text x="1235" y="493" text-anchor="middle" font-size="12" fill="#fff">Registra resultados, pontos</text>
+<text x="1235" y="508" text-anchor="middle" font-size="12" fill="#fff">e classificação dos jogadores</text>
+<path d="M50,652 a120,12 0 0 1 240,0 v72 a120,12 0 0 1 -240,0 z" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+<path d="M50,652 a120,12 0 0 0 240,0" fill="none" stroke="#3C7FC0" stroke-width="1.5"/>
+<text x="170" y="674" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">BD de Jogadores</text>
+<text x="170" y="691" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: banco relacional]</text>
+<text x="170" y="713" text-anchor="middle" font-size="12" fill="#fff">Contas, perfis e histórico</text>
+<path d="M400,652 a120,12 0 0 1 240,0 v72 a120,12 0 0 1 -240,0 z" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+<path d="M400,652 a120,12 0 0 0 240,0" fill="none" stroke="#3C7FC0" stroke-width="1.5"/>
+<text x="520" y="674" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Fila de Espera</text>
+<text x="520" y="691" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: cache em memória]</text>
+<text x="520" y="713" text-anchor="middle" font-size="12" fill="#fff">Jogadores aguardando partida</text>
+<rect x="750" y="640" width="260" height="110" rx="8" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+<text x="880" y="664" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Orquestrador de Servidores</text>
+<text x="880" y="681" text-anchor="middle" font-size="11" font-style="italic" fill="#DCEBFA">[Contêiner: serviço de infraestrutura]</text>
+<text x="880" y="703" text-anchor="middle" font-size="12" fill="#fff">Liga e desliga servidores de jogo</text>
+<text x="880" y="718" text-anchor="middle" font-size="12" fill="#fff">conforme a demanda de partidas</text>
+<polyline points="520,168 520,228" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="534" y="192" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Joga (toques/teclado)</text>
+<polyline points="370,285 170,285 170,428" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="270" y="277" text-anchor="middle" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Faz login</text>
+<text x="270" y="304" text-anchor="middle" font-size="11.5" font-weight="400" fill="#4A5568" font-style="italic" class="halo">[HTTPS/JSON]</text>
+<polyline points="520,340 520,428" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="534" y="380" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Pede partida e recebe</text>
+<text x="534" y="395" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">endereço + token [HTTPS]</text>
+<polyline points="670,285 880,285 880,428" fill="none" stroke="#E8590C" stroke-width="4" marker-end="url(#ah)" marker-start="url(#as)"/>
+<text x="775" y="275" text-anchor="middle" font-size="12.5" font-weight="700" fill="#E8590C" class="halo">Comandos ⇄ estado do jogo</text>
+<text x="775" y="308" text-anchor="middle" font-size="11.5" font-weight="400" fill="#E8590C" font-style="italic" class="halo">[WebSocket/UDP, tempo real]</text>
+<polyline points="1010,485 1103,485" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="1056" y="452" text-anchor="middle" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Envia</text>
+<text x="1056" y="467" text-anchor="middle" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">resultado</text>
+<text x="1056" y="508" text-anchor="middle" font-size="11.5" font-weight="400" fill="#4A5568" font-style="italic" class="halo">[HTTPS]</text>
+<polyline points="170,540 170,640" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="184" y="592" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Lê/grava [SQL]</text>
+<polyline points="470,540 470,640" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="484" y="598" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Entra/sai da fila</text>
+<polyline points="630,540 630,590 800,590 800,640" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="715" y="582" text-anchor="middle" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Pede servidor</text>
+<polyline points="880,640 880,540" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="896" y="598" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Cria/encerra instâncias</text>
+<polyline points="1235,540 1235,780 170,780 170,736" fill="none" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="700" y="772" text-anchor="middle" font-size="12.5" font-weight="400" fill="#1A202C" class="halo">Lê/grava pontuação e perfil [SQL]</text>
+<rect x="30" y="862" width="1380" height="74" rx="8" fill="#FAFAFA" stroke="#CBD5E0"/>
+<text x="48" y="886" text-anchor="start" font-size="13" font-weight="700" fill="#1A202C">Legenda</text>
+<rect x="150" y="872" width="46" height="22" rx="4" fill="#438DD5" stroke="#3C7FC0"/>
+<text x="206" y="888" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C">Contêiner (parte executável do sistema)</text>
+<rect x="450" y="872" width="46" height="22" rx="4" fill="#438DD5" stroke="#E8590C" stroke-width="3.5"/>
+<text x="506" y="888" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C">Contêiner crítico (tempo real)</text>
+<path d="M680,877 a14,5 0 0 1 28,0 v13 a14,5 0 0 1 -28,0 z" fill="#438DD5" stroke="#3C7FC0"/>
+<text x="718" y="888" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C">Armazenamento de dados</text>
+<polyline points="900,883 950,883" stroke="#3B4252" stroke-width="1.8" marker-end="url(#a)"/>
+<text x="958" y="888" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C">A usa B (a seta aponta para quem é usado)</text>
+<polyline points="158,916 200,916" stroke="#E8590C" stroke-width="4" marker-end="url(#ah)" marker-start="url(#as)"/>
+<text x="210" y="921" text-anchor="start" font-size="12.5" font-weight="400" fill="#1A202C">Comunicação contínua nos dois sentidos, com latência mínima</text>
+</svg>
